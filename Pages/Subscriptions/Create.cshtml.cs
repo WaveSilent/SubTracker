@@ -21,7 +21,6 @@ namespace SubscriptionManager.Pages.Subscriptions
 
         public SelectList Categories { get; set; } = default!;
 
-        // Загружаем список категорий для выпадающего списка
         public async Task OnGetAsync()
         {
             var categories = await _context.Categories.ToListAsync();
@@ -32,20 +31,16 @@ namespace SubscriptionManager.Pages.Subscriptions
         {
             if (!ModelState.IsValid)
             {
-                // Если ошибки валидации - заново загружаем категории и показываем форму
                 var categories = await _context.Categories.ToListAsync();
                 Categories = new SelectList(categories, "Id", "Name");
                 return Page();
             }
 
-            // Устанавливаем дату создания
             Subscription.CreatedAt = DateTime.UtcNow;
 
-            // Добавляем подписку в базу
             _context.Subscriptions.Add(Subscription);
             await _context.SaveChangesAsync();
 
-            // Перенаправляем на главную
             return RedirectToPage("/Index");
         }
     }
