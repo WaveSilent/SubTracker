@@ -14,7 +14,7 @@ namespace SubscriptionManager.Models
         public string Name { get; set; } = string.Empty;
 
         [Display(Name = "Иконка (класс Font Awesome)")]
-        public string IconClass { get; set; } = "fa-solid fa-tag"; // стандартная иконка-тег
+        public string IconClass { get; set; } = "fa-solid fa-tag"; 
 
         // Навигационное свойство для связи с подписками
         public ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
