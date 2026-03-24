@@ -15,7 +15,6 @@ namespace SubscriptionManager.Pages
         public decimal TotalYearly { get; set; }
         public int TotalCount { get; set; }
 
-        // Добавляем свойство для текущей сортировки
         public string CurrentSort { get; set; } = "date";
 
         public IndexModel(ApplicationDbContext context, ILogger<IndexModel> logger)
@@ -26,15 +25,12 @@ namespace SubscriptionManager.Pages
 
         public async Task OnGetAsync(string sortOrder)
         {
-            // Сохраняем текущую сортировку
             CurrentSort = sortOrder ?? "date";
 
-            // Базовый запрос
             var query = _context.Subscriptions
                 .Include(s => s.Category)
                 .AsQueryable();
 
-            // Применяем сортировку
             query = CurrentSort switch
             {
                 "name" => query.OrderBy(s => s.Name),
@@ -48,7 +44,6 @@ namespace SubscriptionManager.Pages
 
             Subscriptions = await query.ToListAsync();
 
-            // Считаем статистику
             TotalMonthly = Subscriptions.Sum(s => s.MonthlyPrice);
             TotalYearly = TotalMonthly * 12;
             TotalCount = Subscriptions.Count;
