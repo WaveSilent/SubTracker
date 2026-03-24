@@ -51,7 +51,6 @@ namespace SubscriptionManager.Pages.Subscriptions
                 return Page();
             }
 
-            // Важно! Убеждаемся, что дата в UTC
             if (Subscription.CreatedAt.Kind != DateTimeKind.Utc)
             {
                 Subscription.CreatedAt = DateTime.SpecifyKind(Subscription.CreatedAt, DateTimeKind.Utc);
