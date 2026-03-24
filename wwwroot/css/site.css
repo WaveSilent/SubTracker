@@ -17,12 +17,10 @@ html {
   min-height: 100%;
 }
 
-/* Плавный переход темы */
 body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Стили для карточек в темной теме */
 [data-bs-theme="dark"] .card {
     background-color: #2d2d2d;
     border-color: #404040;
