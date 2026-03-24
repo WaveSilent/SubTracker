@@ -28,13 +28,13 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        logger.LogInformation("Ïðèìåíåíèå ìèãðàöèé ê áàçå äàííûõ...");
+        logger.LogInformation("Применение миграций к базе данных...");
         await context.Database.MigrateAsync();
-        logger.LogInformation("Ìèãðàöèè óñïåøíî ïðèìåíåíû!");
+        logger.LogInformation("Миграции успешно применены!");
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "Îøèáêà ïðè ïðèìåíåíèè ìèãðàöèé");
+        logger.LogError(ex, "Ошибка при применении миграций");
     }
 }
 
