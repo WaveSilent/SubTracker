@@ -3,7 +3,6 @@ using SubscriptionManager.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Добавляем русскую локаль для рублей
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
     options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("ru-RU");
@@ -11,21 +10,17 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SupportedUICultures = new[] { new System.Globalization.CultureInfo("ru-RU") };
 });
 
-// Добавляем глобальную культуру для форматирования чисел и валют
 var cultureInfo = new System.Globalization.CultureInfo("ru-RU");
 System.Globalization.CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
-// Add services to the container.
 builder.Services.AddRazorPages();
 
-// Добавляем контекст базы данных
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-// Автоматическое применение миграций при запуске в Docker
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -33,18 +28,16 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        logger.LogInformation("Применение миграций к базе данных...");
+        logger.LogInformation("ГЏГ°ГЁГ¬ГҐГ­ГҐГ­ГЁГҐ Г¬ГЁГЈГ°Г Г¶ГЁГ© ГЄ ГЎГ Г§ГҐ Г¤Г Г­Г­Г»Гµ...");
         await context.Database.MigrateAsync();
-        logger.LogInformation("Миграции успешно применены!");
+        logger.LogInformation("ГЊГЁГЈГ°Г Г¶ГЁГЁ ГіГ±ГЇГҐГёГ­Г® ГЇГ°ГЁГ¬ГҐГ­ГҐГ­Г»!");
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "Ошибка при применении миграций");
-        // Не падаем, если БД еще не готова - приложение перезапустится
+        logger.LogError(ex, "ГЋГёГЁГЎГЄГ  ГЇГ°ГЁ ГЇГ°ГЁГ¬ГҐГ­ГҐГ­ГЁГЁ Г¬ГЁГЈГ°Г Г¶ГЁГ©");
     }
 }
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
