@@ -1,0 +1,18 @@
+# Папки сборки
+/bin/
+/obj/
+/Migrations/
+
+# Папки пользователя
+/Properties/launchSettings.json
+
+# Файлы Visual Studio
+.vs/
+*.user
+*.suo
+
+# Docker
+.DS_Store
+
+# Папка с пакетами
+/packages/

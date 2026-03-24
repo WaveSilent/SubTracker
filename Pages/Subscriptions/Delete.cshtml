@@ -1,0 +1,58 @@
+﻿@page "{id?}"
+@model SubscriptionManager.Pages.Subscriptions.DeleteModel
+@{
+    ViewData["Title"] = "Удалить подписку";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle"></i> Подтверждение удаления
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <h5>Вы уверены, что хотите удалить эту подписку?</h5>
+                    <p class="text-muted">Это действие нельзя отменить.</p>
+
+                    <dl class="row mt-4">
+                        <dt class="col-sm-3">Название</dt>
+                        <dd class="col-sm-9">@Model.Subscription.Name</dd>
+
+                        <dt class="col-sm-3">Категория</dt>
+                        <dd class="col-sm-9">
+                            <i class="@Model.Subscription.Category?.IconClass me-1"></i>
+                            @Model.Subscription.Category?.Name
+                        </dd>
+
+                        <dt class="col-sm-3">Стоимость</dt>
+                        <dd class="col-sm-9">@Model.Subscription.MonthlyPrice.ToString("C0") / мес</dd>
+
+                        <dt class="col-sm-3">День списания</dt>
+                        <dd class="col-sm-9">@Model.Subscription.BillingDay число</dd>
+
+                        @if (!string.IsNullOrEmpty(Model.Subscription.Notes))
+                        {
+                            <dt class="col-sm-3">Заметки</dt>
+                            <dd class="col-sm-9">@Model.Subscription.Notes</dd>
+                        }
+                    </dl>
+
+                    <form method="post">
+                        <input type="hidden" asp-for="Subscription.Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="/Index" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Отмена
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Удалить навсегда
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

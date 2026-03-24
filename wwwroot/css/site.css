@@ -1,0 +1,61 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+/* Плавный переход темы */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Стили для карточек в темной теме */
+[data-bs-theme="dark"] .card {
+    background-color: #2d2d2d;
+    border-color: #404040;
+}
+
+[data-bs-theme="dark"] .card-footer {
+    background-color: #252525 !important;
+}
+
+[data-bs-theme="dark"] .btn-outline-primary {
+    color: #8bb9fe;
+    border-color: #8bb9fe;
+}
+
+    [data-bs-theme="dark"] .btn-outline-primary:hover {
+        background-color: #8bb9fe;
+        color: #000;
+    }
+
+[data-bs-theme="dark"] .btn-outline-danger {
+    color: #ff7b7b;
+    border-color: #ff7b7b;
+}
+
+[data-bs-theme="dark"] .text-muted {
+    color: #a0a0a0 !important;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}

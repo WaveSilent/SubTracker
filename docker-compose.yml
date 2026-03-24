@@ -1,0 +1,41 @@
+
+
+services:
+  # Сервис базы данных PostgreSQL
+  postgres:
+    image: postgres:16
+    container_name: subscriptionmanager_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: SubscriptionDb
+    ports:
+      - "5433:5432"  # Хост:Контейнер
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Сервис веб-приложения
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: subscriptionmanager_web
+    ports:
+    - "5000:8080"   # хост:контейнер (8080 внутри контейнера
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=SubscriptionDb;Username=postgres;Password=1234
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    name: subscriptionmanager_pgdata

@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SubscriptionManager</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SubscriptionManager.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Index">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                    </li>
+                </ul>
+
+                <!-- Переключатель темной темы -->
+                <div class="form-check form-switch me-3">
+                    <input class="form-check-input" type="checkbox" id="darkModeSwitch">
+                    <label class="form-check-label" for="darkModeSwitch" id="themeLabel">🌙 Темная</label>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - SubscriptionManager - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        // Проверяем сохраненную тему при загрузке
+        const darkModeSwitch = document.getElementById('darkModeSwitch');
+        const themeLabel = document.getElementById('themeLabel');
+
+        // Применить тему
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.body.setAttribute('data-bs-theme', 'dark');
+                themeLabel.innerHTML = '☀️ Светлая';
+            } else {
+                document.body.setAttribute('data-bs-theme', 'light');
+                themeLabel.innerHTML = '🌙 Темная';
+            }
+        }
+
+        // Проверяем сохраненные настройки
+        const savedTheme = localStorage.getItem('darkMode');
+        if (savedTheme === 'true') {
+            darkModeSwitch.checked = true;
+            applyTheme(true);
+        }
+
+        // Слушаем переключение
+        darkModeSwitch.addEventListener('change', function() {
+            applyTheme(this.checked);
+            localStorage.setItem('darkMode', this.checked);
+        });
+    </script>
+</body>
+</html>

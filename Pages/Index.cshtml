@@ -1,0 +1,144 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Мои подписки";
+}
+
+<div class="container mt-4">
+    <!-- Заголовок и кнопка добавления -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-6">📋 Мои подписки</h1>
+        <a href="/Subscriptions/Create" class="btn btn-primary">
+            <i class="fas fa-plus-circle"></i> Добавить подписку
+        </a>
+    </div>
+
+    <!-- Панель сортировки -->
+    <div class="card mb-4">
+        <div class="card-body py-2">
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-muted">Сортировать:</span>
+
+                <a asp-page="/Index" asp-route-sortOrder="name"
+                   class="btn btn-sm @(Model.CurrentSort == "name" ? "btn-primary" : "btn-outline-secondary")">
+                    По названию <i class="fas fa-sort-alpha-down"></i>
+                </a>
+
+                <a asp-page="/Index" asp-route-sortOrder="price"
+                   class="btn btn-sm @(Model.CurrentSort == "price" ? "btn-primary" : "btn-outline-secondary")">
+                    По цене <i class="fas fa-sort-numeric-down"></i>
+                </a>
+
+                <a asp-page="/Index" asp-route-sortOrder="date"
+                   class="btn btn-sm @(Model.CurrentSort == "date" ? "btn-primary" : "btn-outline-secondary")">
+                    По дню списания <i class="fas fa-sort-numeric-down"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Карточки со статистикой -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Всего подписок</h5>
+                    <p class="card-text display-6">@Model.TotalCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">В месяц</h5>
+                    <p class="card-text display-6">@Model.TotalMonthly.ToString("C0")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">В год</h5>
+                    <p class="card-text display-6">@Model.TotalYearly.ToString("C0")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Список подписок -->
+    @if (Model.Subscriptions.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var sub in Model.Subscriptions)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="card-title mb-1">
+                                        <i class="@sub.Category?.IconClass me-2"></i>
+                                        @sub.Name
+                                    </h5>
+                                    <h6 class="text-muted">@sub.Category?.Name</h6>
+                                </div>
+                                @{
+                                    var days = sub.DaysUntilBilling;
+                                    string badgeClass = days switch
+                                    {
+                                        <= 1 => "bg-danger",
+                                        <= 7 => "bg-warning text-dark",
+                                        _ => "bg-success"
+                                    };
+                                }
+                                <span class="badge @badgeClass">
+                                    @days дн.
+                                </span>
+                            </div>
+
+                            <p class="card-text mt-3">
+                                <span class="h4 text-primary">@sub.MonthlyPrice.ToString("C0")</span>
+                                <span class="text-muted">/мес</span>
+                            </p>
+
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar-alt me-1"></i>Списание @sub.BillingDay числа
+                                </small>
+                            </p>
+
+                            @if (!string.IsNullOrEmpty(sub.Notes))
+                            {
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <i class="fas fa-comment me-1"></i>@sub.Notes
+                                    </small>
+                                </p>
+                            }
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 d-flex justify-content-end gap-2">
+                            <a href="/Subscriptions/Edit/@sub.Id" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="/Subscriptions/Delete/@sub.Id" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>       
+            }
+        </div>
+    }
+    else
+    {
+        <!-- Пустое состояние -->
+        <div class="text-center mt-5">
+            <i class="fas fa-smile-wink fa-4x text-muted mb-3"></i>
+            <h3>У вас пока нет подписок</h3>
+            <p class="text-muted">Добавьте первую подписку, чтобы начать учет</p>
+            <a href="/Subscriptions/Create" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus-circle"></i> Добавить подписку
+            </a>
+        </div>
+    }
+</div>
