@@ -10,7 +10,7 @@ namespace SubscriptionManager.Data
         {
         }
 
-        // Добавляем таблицы
+        // Таблицы
         public DbSet<Category> Categories { get; set; }
         public DbSet<Subscription> Subscriptions { get; set; }
 
@@ -18,22 +18,19 @@ namespace SubscriptionManager.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Добавляем начальные категории
+            // Начальные категории
             SeedInitialCategories(modelBuilder);
-
-            // Настройка связей и индексов
 
             // Индекс для быстрого поиска по названию категории
             modelBuilder.Entity<Category>()
                 .HasIndex(c => c.Name)
                 .IsUnique();
 
-            // Устанавливаем связь между подпиской и категорией
             modelBuilder.Entity<Subscription>()
                 .HasOne(s => s.Category)
                 .WithMany(c => c.Subscriptions)
                 .HasForeignKey(s => s.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict); // Запрещаем удалять категорию, если есть подписки
+                .OnDelete(DeleteBehavior.Restrict); 
 
             // Индекс для сортировки подписок по дате создания
             modelBuilder.Entity<Subscription>()
